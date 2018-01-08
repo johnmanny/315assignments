@@ -9,7 +9,7 @@
 using namespace std;
 
 int main() {
-	const int SPACESNUM = 1, DISTTONEWLINE = 1, FIRSTLINE = 2;
+	const int SPACESNUM = 1, DISTTONEWLINE = 1, FIRSTLINE = 3;
 	int x, y = 0;
 	cin.ignore(FIRSTLINE, '\n');
 	while (cin) {
