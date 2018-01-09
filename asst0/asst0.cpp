@@ -1,26 +1,27 @@
 /*
 	Author: John Nemeth
-	Description: todo
-	Sources: todo
+	Description: finding the sum and product of pairs of input values
+	Sources: class material, previous projects
 */
 #include <iostream>
-#include <string>
 
 using namespace std;
 
 int main() {
-	const int SPACESNUM = 1, DISTTONEWLINE = 1, FIRSTLINE = 3;
-	int x, y = 0;
-	cin.ignore(FIRSTLINE, '\n');
-	while (cin) {
+	const int SPACESNUM = 1, DISTTONEWLINE = 1;
+	int x, y, lines = 0;
+	cin >> lines;
+	cin.ignore(DISTTONEWLINE, '\n');
+	
+	while (lines != 0) {
 		cin >> x;
 		cin.ignore(SPACESNUM, ' ');
 		cin >> y;
 		cin.ignore(DISTTONEWLINE, '\n');
 		
-		cout << x << ' ' << y << endl;
+		cout << x + y << ' ' << x * y << endl;
+		lines--;
 	}
-
 
 	return 0;
 }
