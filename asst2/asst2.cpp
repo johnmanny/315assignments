@@ -8,44 +8,35 @@
 
 using namespace std;
 
-/*
-struct node 
-{
-	int pathDist = 0;
-	int longestPathTo = 0;
-	int numOfLongest = 0;
-};
-*/
-
 int main() {
 	// spacesnum is distance between each value from input
 	const int SPACESNUM = 1;
 	int nodes = 0, edges = 0;
-	
+
+	// take first line of input
 	cin >> nodes;
 	cin.ignore(SPACESNUM, ' ');
 	cin >> edges;
 	cin.ignore(SPACESNUM, '\n');
-	cout << nodes << ' ' << edges << endl;
-	
+
+	// create dynamic 2d array to use variable dimensions
 	int** adjMatrix;
 	adjMatrix = new int*[nodes];
 	for(size_t i = 0; i < nodes; ++i) {
-		//// created 3 extra columns
+		//// created 2 extra columns
 		// nodes + 1: longest path to that point
-		// nodes + 2: longest path count
-		// nodes + 3: longestpath value in row
-		adjMatrix[i] = new int[nodes + 3];
+		// nodes + 2: longest path count of prior node
+		adjMatrix[i] = new int[nodes + 2];
 	}
-	
-	// init dynamic array values
+
+	// init dynamic array values to zero to prevent memory errors
 	int row = 0, column = 0, distValue = 0;	
 	for(row = 0; row < nodes; row++){
-		for(column = 0; column < nodes + 3; column++) {
+		for(column = 0; column < nodes + 2; column++) {
 			adjMatrix[row][column] = 0;
 		}
 	}
-	
+
 	// assign edge values in matrix
 	for(int i = 0; i < edges; i++) {
 		cin >> row;
@@ -55,92 +46,43 @@ int main() {
 		cin >> distValue;
 		cin.ignore(SPACESNUM, '\n');
 		adjMatrix[row - 1][column - 1] = distValue;
-		cout << adjMatrix[row - 1][column - 1] << endl;
 	}
-	
-	//int longestPath = 0, numLongestPaths = 0;
-	// create 2 values for the column numbers of longest row path and count 
-	int priorLP = nodes, priorLPCount = nodes + 1, longestPRowVal = nodes + 2;
-	int longestPath = 0, longestInRow = 0;
-	bool firstInRow = true;
-	//adjMatrix[0][priorLPCount] = 1;
-	for(int x = 0; x < nodes; x++) {
-		longestInRow = 0;
-		firstInRow = true;
-		for(int y = 0; y < nodes; y++) {
-			//if (x > 0)
-			//	adjMatrix[x][priorLPCount] += adjMatrix[x - 1][priorLPCount];
-			// continue loop if no relevant value/connection
 
-			/*if (x > y) {
-				if ((adjMatrix[y][x] + adjMatrix[y][priorLP]) == longestPath) {
-					cout << "--LRCOUNTCHECK" << endl;
-					cout << "checking row/col: " << y << ' ' << x;
-					cout << " is " << adjMatrix[y][x] << endl;
-					cout << " -- adding pathval: " << adjMatrix[y][longestPRowVal];
-					cout << " and count " << adjMatrix[y][priorLPCount];
-					cout << " to rowcount: " << adjMatrix[x][priorLPCount];
-					//adjMatrix[x][priorLPCount] += adjMatrix[y][priorLPCount];
-					adjMatrix[x][priorLPCount] = adjMatrix[y][priorLPCount];
-					cout << " equals: " << adjMatrix[x][priorLPCount] << endl;
-				}
-			}*/
-			//if (y == (nodes - 1))
-			//	LPRCount = adjMatrix[x][priorLPCount];
-			
+	// create 2 values extra columns for longestpath to row and longestpath count to row
+	int priorLP = nodes, priorLPCount = nodes + 1;
+
+	// init LPcount for first node
+	adjMatrix[0][priorLPCount] = 1;
+
+	//// using adjacency matrix
+	// outside loop for rows (nodes)
+	for(int x = 0; x < nodes; x++) {
+		// inside loop for columns
+		for(int y = 0; y < nodes; y++) {
+			// if no connection to node, move to next column
 			if (adjMatrix[x][y] == 0)
 				continue;
-			
-			/*
-			if (longestInRow == adjMatrix[x][y])
-				adjMatrix[x][priorLPCount] += 1;
-			if (adjMatrix[x][y] > longestInRow) {
-				//if (longestInRow == 0)
-				adjMatrix[x][priorLPCount] = LPRCount;
-				//else
-				//	adjMatrix[x][priorLPCount] = LPNum;
-				longestInRow = adjMatrix[x][y];
-				adjMatrix[x][longestPRowVal] = longestInRow;
-			}
-			*/
-			//if ((longestPath + adjMatrix
-			/*(if (longestInRow == adjMatrix[x][y]) {
-				adjMatrix[x][priorLPCount] += 1;
-				cout << "CHECK IT BRHRHRHRHRHRHRHRHHRHRHRHRH" << endl;
-			}
-			if ((longestInRow < adjMatrix[x][y]) && firstInRow) {
-				firstInRow = false;
-				longestInRow = adjMatrix[x][y];
-				adjMatrix[x][priorLPCount] = 1;
-			}
-			if (longestInRow < adjMatrix[x][y])
-				adjMatrix[x][priorLPCount] = 1;
-			*/
+			// if connection to next node is a longest path
 			if ((adjMatrix[x][y] + adjMatrix[x][priorLP]) >= adjMatrix[y][priorLP]) {
+				//// if next node's path is longest, add path counts together
+				// otherwise set next longest count to current node's
+				if ((adjMatrix[x][y] + adjMatrix[x][priorLP]) == adjMatrix[y][priorLP])
+					adjMatrix[y][priorLPCount] += adjMatrix[x][priorLPCount];
+				else
+					adjMatrix[y][priorLPCount] = adjMatrix[x][priorLPCount];
+				// set next node's longest path count
 				adjMatrix[y][priorLP] = adjMatrix[x][y] + adjMatrix[x][priorLP];
-				longestPath = adjMatrix[y][priorLP];
-				adjMatrix[y][priorLPCount] = adjMatrix[x][priorLPCount] + 1;
-				cout << "sent: " << adjMatrix[x][priorLPCount] << " from row: " << x << " to row: ";
-				cout << y << " and it's now: " << adjMatrix[y][priorLPCount] << endl;
 			}
-			//if (longestPath == (adjMatrix[x][y] + adjMatrix[x][priorLP]))
-				
-			//if (longestPath == adjMatrix[x][y])
-			//	adjMatrix[x][priorLPCount] += 1;
-			
-			
-			cout << "row/col: " << x << " " << y << " length: " << adjMatrix[x][y];
-			cout << " priorLPCount: " << adjMatrix[x][priorLPCount];
-			cout << " highestRowVal: " << adjMatrix[x][longestPRowVal] << endl;
 		}
 	}
-	//adjMatrix[nodes - 1][priorLP] = 5;
-	//adjMatrix[nodes - 1][priorLPCount] = 10;
-	//cout << "longest path: " << adjMatrix[nodes - 1][priorLP] << endl << "number of longest paths: " << adjMatrix[nodes - 1][priorLPCount] << endl;
+
 	cout << "longest path: " << adjMatrix[nodes - 1][priorLP] << endl << "number of longest paths: " << adjMatrix[nodes - 1][priorLPCount] << endl;
+	
+	// delete dynamic array to prevent memory leaks
 	for(size_t i = 0; i < nodes; ++i) {
 		delete[] adjMatrix[i];
 	}
 	delete[] adjMatrix;
+
 	return 0;
 }
