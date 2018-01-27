@@ -56,6 +56,11 @@ int main() {
 			//if (x > 0)
 			//	adjMatrix[x][priorLPCount] += adjMatrix[x - 1][priorLPCount];
 			// continue loop if no relevant value/connection
+			if (x > y) {
+				if ((adjMatrix[y][x] + adjMatrix[y][priorLP]) == adjMatrix[x][priorLP]) {
+					adjMatrix[x][priorLPCount] += adjMatrix[y][priorLPCount];
+				} 
+			}
 			if (adjMatrix[x][y] == 0)
 				continue;
 			
@@ -86,7 +91,12 @@ int main() {
 				adjMatrix[y][priorLP] = adjMatrix[x][y] + adjMatrix[x][priorLP];
 				//adjMatrix[y][priorLPCount] += adjMatrix[x][priorLPCount];
 			}
-			f (adjMatrix[x][y] > longestInRow)
+			/*if (x > y) {
+				if ((adjMatrix[y][x] + adjMatrix[y][priorLP]) == adjMatrix[x][priorLP]) {
+					adjMatrix[x][priorLPCount] += adjMatrix[y][priorLPCount];
+				} 
+			}*/
+			if (adjMatrix[x][y] > longestInRow)
 				longestInRow = adjMatrix[x][y];
 			if (longestInRow == adjMatrix[x][y])
 				adjMatrix[x][priorLPCount] += 1;
