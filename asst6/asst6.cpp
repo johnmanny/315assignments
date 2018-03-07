@@ -30,10 +30,10 @@ int main(int argc, char* argv[]) {
 		// setup dictionary for words
 		const char dictFileName[] = "diction10k.txt";			// path of dictionary 
 		vector<string> dictVector;					// declare vector(dynamic array) for dictionary
-		if (buildDict(dictVector, dictFileName))			// populates vector with dictionary entries
+		if (buildDict(dictVector, dictFileName))			// populates vector with dictionary entries, checks for errors
 			cout << "--------No errors loading dictionary!\n" << endl;
 		else {
-			cout << "--------Error building dictionary! Exiting...\n" << endl;	
+			cout << "--------Error building dictionary from '" << dictFileName << "'! Exiting...\n" << endl;	
 			return 0;
 		}
 		int lines = 0;					// holds number of strings in input file
@@ -55,7 +55,7 @@ bool buildDict(vector <string> &dictVec, const char* fileName) {
 	ifstream dictFile;		// declare new input stream
 	dictFile.open(fileName);
 	if (!dictFile) {		// error checking for no dictfile in directory
-		cout << "dictionary " << fileName << " not found" << endl;
+		cout << "dictionary '" << fileName << "' not found" << endl;
 		return false;
 	}
 	else {
@@ -132,7 +132,7 @@ void checkValidSplit(vector<string> &dictVec, string& word) {
 void printSplitWord(vector<int> &splitVec, string& curWord) {
 	int wordIndex = 0, wordSize = curWord.size();
 	cout << "\titerative attempt:\n\tYES, can be split\n\n\tPossible split:\n\t";
-	while (wordIndex != wordSize) {
+	while (wordIndex < wordSize) {
 		if (wordIndex > wordSize) {				// for the sake of mindfullness
 			cout << "Error! wordIndex beyond wordSize!" << endl;
 			break;
