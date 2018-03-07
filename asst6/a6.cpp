@@ -12,9 +12,9 @@
 //#include <bits/stdc++.h>
 using namespace std;
 
-// builds dictionary with hardcoded name
-void buildDict(vector<string> &, const char*);
-bool searchForWord(vector<string> &, string&);
+void buildDict(vector<string> &, const char*);	// passes hardocoded path
+bool searchForWord(vector<string> &, string&);	// uses binary search
+void checkValidSplit(string&);		// iterative, bottom-up approach
 
 // main
 int main(int argc, char* argv[]) {
@@ -27,7 +27,7 @@ int main(int argc, char* argv[]) {
 	if (!inFile)		// check for file not opened
 		cout << "Failed to open " << argv[1] << endl;
 	else {
-		// dictionary variables
+		// setup dictionary for words
 		const char dictFileName[] = "diction10k.txt";		// path of dictionary 
 		vector<string> dictVector;		// declare vector for dictionary
 		buildDict(dictVector, dictFileName);	// populates vector with dictionary entries
@@ -37,19 +37,56 @@ int main(int argc, char* argv[]) {
 			cout << test << " was found!" << endl;
 		else
 			cout << test << " was not found!" << endl;
+		// get input from problem files
 		string curLine;
 		inFile >> lines;
 		inFile.ignore(5, '\n');
 		cout << lines << endl;
 		for (int i = 0; i < lines; i++) {
-			getline(inFile, curLine);
+			getline(inFile, curLine, '\n');
 			cout << "phrase number: " << (i + 1) << endl << curLine << endl << endl;
-
+			checkValidSplit(curLine);
 		}
 	}
 
 	inFile.close();
 	return 0;
+}
+
+// check if word has valid break
+void checkValidSplit(string& word) {
+	int size = word.size();		// check for valid word size
+	if (size == 0) 
+		cout << "word size is zero. failed to find valid split" << endl;
+	else {
+		/* explanation: 
+		array - created dynamic array(vector) holds the ending index of
+			a word in it's index value. that respective value of the index
+			is the starting position of a word within the string. if there is
+			no word that starts at i in splitVec[i], splitVec[i] = -1. entries
+			in the vector are inited to -1.
+		subproblem- each time a position is evaluated, it needs to have an ending index
+			for the split to be valid
+		*/
+		vector<int> splitVec(size, -1);
+		//cout << splitVec[size] << endl;
+		for (int i = size; i > 0; i--) {
+			// check for word at from last element to index
+			if (splitVec[i] == -1 && searchForWord(word.substr(i, size))) 
+				splitVec[i] = i;
+			// check following index values to move up new word end
+			if (splitVec[i] != -1) {
+				// check for last element (then split is complete)
+				if (i == 1) 
+					// call the print function
+				for (int j = i - 1; j > 0; j--) {
+					if (splitVec[j] == false && searchForWord(word.substr(j, i - j))) {
+						splitVec[j] = 
+				}
+
+			} 
+		}
+	}
 }
 
 // to search for word in dictionary using iterative binary search
@@ -93,7 +130,7 @@ void buildDict(vector <string> &dictVec, const char* fileName) {
 			dictVec.pop_back();
 			size--;
 		}
-		cout << "first dict value: " << dictVec[0] << " last dict value: " << dictVec[size] << endl;
+		cout << "1st dict val: " << dictVec[0] << " last dict val: " << dictVec[size] << endl;
 		cout << "Dictionary sucessfully loaded!" << endl;
 		dictFile.close();
 	}
