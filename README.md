@@ -1,1 +1,1 @@
-# Assigmments for CIS315
+# Assignments for CIS315
