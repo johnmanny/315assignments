@@ -70,20 +70,19 @@ void checkValidSplit(string& word) {
 		*/
 		vector<int> splitVec(size, -1);
 		//cout << splitVec[size] << endl;
-		for (int i = size; i > 0; i--) {
+		for (int i = size - 1; i >= 0; i--) {	// evaluates from last entry forward
 			// check for word at from last element to index
-			if (splitVec[i] == -1 && searchForWord(word.substr(i, size))) 
-				splitVec[i] = i;
+			if (splitVec[i] == -1 && searchForWord(word.substr(i, size - i))) 
+				splitVec[i + 1] = i;	// allow to move to second loop
 			// check following index values to move up new word end
 			if (splitVec[i] != -1) {
 				// check for last element (then split is complete)
-				if (i == 1) 
+				if (i == 0) 
 					// call the print function
 				for (int j = i - 1; j > 0; j--) {
-					if (splitVec[j] == false && searchForWord(word.substr(j, i - j))) {
-						splitVec[j] = 
-				}
-
+					if (splitVec[j] == -1 && searchForWord(word.substr(j, i - j)))
+						splitVec[j] = j + (i - j);
+					if (j == 1)	// if the last operation 
 			} 
 		}
 	}
