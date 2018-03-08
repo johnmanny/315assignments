@@ -102,21 +102,21 @@ void checkValidSplit(vector<string> &dictVec, string& word) {
 		int length = 0;
 		string subString;
 		vector<int> splitVec(size, -1);		// declare vector with size and initialize entries to -1
-		for (int i = size; i >= 0; i--) {	// evaluates bottom-up
-			length = size - (i - 1);	// set length to next word each iteration
-			subString = word.substr(i, length);	// set substring to send into searchForWord
-			if ((splitVec[i] == -1) && (searchForWord(dictVec, subString))) 
-				splitVec[i] = i + length;	// allow to move to second loop
-			if (splitVec[i] != -1) {		// given valid word is after
+		for (int i = size; i >= 0; i--) {	// evaluates bottom-up, i always beginning of possible word
+			length = size - (i - 1);	// set length of word evaluated
+			subString = word.substr(i, length);	// possible word starts at i, ends at next evaluated word (i + length)
+			if ((splitVec[i] == -1) && (searchForWord(dictVec, subString))) 	// if doesn't have word already and in dict
+				splitVec[i] = i + length;	// set end of word that starts at i in splitword vector
+			if (splitVec[i] != -1) {		// if word starts at that index
 				if (i == 0) {			// split is complete if reached first element
-					printSplitWord(splitVec, word);
+					printSplitWord(splitVec, word);		// print completed string partition
 					return;
 				}
-				for (int j = i - 1; j >= 0; j--) {
-					subString = word.substr(j, i - j);
+				for (int j = i - 1; j >= 0; j--) {		// j always beginning of possible word
+					subString = word.substr(j, i - j);	// length of new word always end - start
 					if (splitVec[j] == -1 && searchForWord(dictVec, subString))
-						splitVec[j] = i - j;
-					if ((j == 0) && (splitVec[j] != -1)) {	// split is complete if first element and not  
+						splitVec[j] = i - j;		// set length of new word that starts at j
+					if ((j == 0) && (splitVec[j] != -1)) {	// split is complete if first element has word start
 						printSplitWord(splitVec, word);
 						return;
 					}
@@ -128,7 +128,7 @@ void checkValidSplit(vector<string> &dictVec, string& word) {
 	return;
 }
 
-// prints possible successive words
+// prints successive words
 void printSplitWord(vector<int> &splitVec, string& curWord) {
 	int wordIndex = 0, wordSize = curWord.size();
 	cout << "\titerative attempt:\n\tYES, can be split\n\n\tPossible split:\n\t";
@@ -137,8 +137,8 @@ void printSplitWord(vector<int> &splitVec, string& curWord) {
 			cout << "Error! wordIndex beyond wordSize!" << endl;
 			break;
 		}
-		cout << curWord.substr(wordIndex, splitVec[wordIndex]) << ' ';
-		wordIndex = wordIndex + splitVec[wordIndex];		// set current index to last word's ending index
+		cout << curWord.substr(wordIndex, splitVec[wordIndex]) << ' ';		// splitVec[wordIndex] is length of word in string
+		wordIndex = wordIndex + splitVec[wordIndex];				// set current index to last word's ending index
 	} 
 	cout << "\n--------------------------------------------------------------\n";
 	return; 
