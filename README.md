@@ -1,1 +1,2 @@
-# Assignments for CIS315
+# Basic Algorithms
+Demonstrations for different algorithm doing tasks.
