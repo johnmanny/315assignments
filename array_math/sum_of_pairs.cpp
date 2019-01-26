@@ -11,6 +11,7 @@ int main() {
 	const int SPACESNUM = 1, DISTTONEWLINE = 10;
 	int x, y, lines = 0;
 
+	cout << "Make sure to use '< intest.txt'(Ctrl-C to cancel)" << endl;
 	//read number of lines and move to next line
 	cin >> lines;
 	cin.ignore(DISTTONEWLINE, '\n');
